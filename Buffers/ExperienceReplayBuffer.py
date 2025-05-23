@@ -1,27 +1,32 @@
 import torch
+from collections import deque
+import numpy as np 
+import random
 
 class ExperienceReplay():
     def __init__(self,max_value):
-        self.experience_replay = {"old_state":[],"old_action":[],"reward":[],"new_state":[],"done":[]}
+        self.experience_replay = deque(maxlen=max_value)
         self.max_value = max_value
-    
+        random.seed(13)
+        
     def append(self,old_state,old_action,reward,new_state,done):
-        if(self.size() >= self.max_value):
-            for key in self.experience_replay.keys():
-                self.experience_replay[key].pop(0)
-        self.experience_replay["old_state"].append(old_state)
-        self.experience_replay["old_action"].append(old_action)
-        self.experience_replay["reward"].append(reward)
-        self.experience_replay["new_state"].append(new_state)
-        self.experience_replay["done"].append(done)
+        experience = {}
+        experience["old_state"]=old_state
+        experience["old_action"]=old_action
+        experience["reward"]=reward
+        experience["new_state"]=new_state
+        experience["done"]=done
+        self.experience_replay.append(experience)
         
     def sample(self,batch_size):
-        batch ={}
-        indices = torch.randperm(self.size())[:batch_size]
-        for key in self.experience_replay.keys():
-            batch[key] = torch.tensor(self.experience_replay[key])[indices]
-        return batch
+        batch = random.sample(self.experience_replay,batch_size)
+        old_state = torch.tensor([x["old_state"]for x in batch])
+        old_action = torch.tensor([x["old_action"]for x in batch])
+        reward = torch.tensor([x["reward"]for x in batch])
+        new_state = torch.tensor([x["new_state"]for x in batch])
+        done = torch.tensor([x["done"]for x in batch])
+        return (old_state,old_action,reward,new_state,done)
     def size(self):
-        return len(self.experience_replay["old_state"])
+        return len(self.experience_replay)
     def __len__(self):
         return self.size()
