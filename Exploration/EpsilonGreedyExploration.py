@@ -10,3 +10,7 @@ def epsilon_greedy(action_values ,epsilon,exploit=False):
  
 def epsilon_decay(epsilon,decay_rate,min_epsilon):
     return max(epsilon*decay_rate,min_epsilon)
+
+def linear_epsilon_decay(epsilon,decay_rate,min_epsilon,Episode=1000):
+    
+    return max(epsilon-decay_rate,min_epsilon)
