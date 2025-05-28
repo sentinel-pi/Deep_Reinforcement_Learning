@@ -4,11 +4,11 @@ import numpy as np
 import random
 
 class ExperienceReplay():
-    def __init__(self,max_value):
+    def __init__(self,max_value,device="cpu"):
         self.experience_replay = deque(maxlen=max_value)
         self.max_value = max_value
+        self.device = device 
         random.seed(13)
-        
     def append(self,old_state,old_action,reward,new_state,done):
         experience = {}
         experience["old_state"]=old_state
@@ -20,11 +20,11 @@ class ExperienceReplay():
         
     def sample(self,batch_size):
         batch = random.sample(self.experience_replay,batch_size)
-        old_state = torch.tensor([x["old_state"]for x in batch])
-        old_action = torch.tensor([x["old_action"]for x in batch])
-        reward = torch.tensor([x["reward"]for x in batch])
-        new_state = torch.tensor([x["new_state"]for x in batch])
-        done = torch.tensor([x["done"]for x in batch])
+        old_state = torch.tensor(np.array([x["old_state"]for x in batch]),device=self.device)
+        old_action = torch.tensor(np.array([x["old_action"]for x in batch]),device=self.device)
+        reward = torch.tensor(np.array([x["reward"]for x in batch]),device=self.device)
+        new_state = torch.tensor(np.array([x["new_state"]for x in batch]),device=self.device)
+        done = torch.tensor(np.array([x["done"]for x in batch]),device=self.device)
         return (old_state,old_action,reward,new_state,done)
     def size(self):
         return len(self.experience_replay)
