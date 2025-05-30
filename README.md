@@ -6,7 +6,7 @@ a youtube video course relate to that will produced in the future
 
 
 ## 🧪 Algorithms Implemented
-- **Value Based DRL** (./ValueBased/)
+- [**Value Based DRL**](./ValueBased/)
     - ✅ Deep Q-Learning (DQN)
     - ✅ Double DQN
     - ✅ Dueling DQN
