@@ -5,8 +5,8 @@ the goal of this collection is to be a solid starting point for hobbiest and res
 a youtube video course relate to that will produced in the future 
 
 
-## 🧩 Algorithms Implemented
-- **Value Based DRL**
+## 🧪 Algorithms Implemented
+- **Value Based DRL** (./ValueBased/)
     - ✅ Deep Q-Learning (DQN)
     - ✅ Double DQN
     - ✅ Dueling DQN
