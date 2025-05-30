@@ -3,6 +3,8 @@ from collections import deque
 import numpy as np 
 import random
 
+from zmq import device
+
 class ExperienceReplay():
     def __init__(self,max_value,device="cpu"):
         self.experience_replay = deque(maxlen=max_value)
@@ -30,3 +32,55 @@ class ExperienceReplay():
         return len(self.experience_replay)
     def __len__(self):
         return self.size()
+
+class PrioritizedExperienceReplay(ExperienceReplay):
+    def __init__(self,max_value,device="cpu"):
+        super().__init__(max_value,device)
+
+        self.priorities = deque(maxlen=max_value)
+        self.alpha= 1.0
+        self.alpha_final = 0.6  
+        self.alpha_decrement = 1e-3
+        
+        self.beta = 0.5 
+        self.beta_increment = 1e-3
+        self.beta_final = 1.0 
+        self.epsilon = 1e-5
+        self.max_priority = 1.0 # this is initial probability 
+    # new experiences have to have high priority too 
+    def append(self,old_state,old_action,reward,new_state,done):
+        super().append(old_state,old_action,reward,new_state,done)
+        self.priorities.append(self.max_priority)
+        
+    def update(self,index,td_priority):
+        if td_priority.max().item() > self.max_priority:
+            self.max_priority = td_priority.max().item() 
+        for idx,p in zip(index,td_priority): 
+            self.priorities[idx] =  p.item() + self.epsilon
+            
+    def sample(self,batch_size):
+        P = np.array(self.priorities,dtype=np.float64) + self.epsilon
+        P = P **self.alpha
+        P = P/P.sum()
+        N = self.__len__()
+        
+        IS_weights = (N*P) ** -self.beta
+        IS_weights /= IS_weights.max()
+        
+        self.alpha = max(self.alpha_final,self.alpha - self.alpha_decrement)
+        self.beta = min(self.beta_final,self.beta + self.beta_increment)
+        idx = np.random.choice(range(self.__len__()),p=P , size=batch_size)
+        
+        IS_weights = torch.tensor(np.array([IS_weights[i] for i in idx]),device=self.device)
+        batch = [self.experience_replay[i] for i in idx]
+        
+        old_state = torch.tensor(np.array([x["old_state"]for x in batch]),device=self.device)
+        old_action = torch.tensor(np.array([x["old_action"]for x in batch]),device=self.device)
+        reward = torch.tensor(np.array([x["reward"]for x in batch]),device=self.device)
+        new_state = torch.tensor(np.array([x["new_state"]for x in batch]),device=self.device)
+        done = torch.tensor(np.array([x["done"]for x in batch]),device=self.device)
+        
+        batch = (old_state,old_action,reward,new_state,done)
+        
+        
+        return (batch,idx,IS_weights)
