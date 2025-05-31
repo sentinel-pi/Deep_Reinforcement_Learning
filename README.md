@@ -11,7 +11,7 @@ a youtube video course relate to that will produced in the future
     - ✅ Double DQN
     - ✅ Dueling DQN
     - ✅ Prioritized Experience Replay (PER)
-    - 🔄 Noisy DQN
+    - ✅ Noisy DQN
     - 🔄 N-step DQN 
     - 🔄 c51
     - 🔄 rainbow
