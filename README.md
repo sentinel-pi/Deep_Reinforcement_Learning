@@ -12,7 +12,7 @@ a youtube video course relate to that will produced in the future
     - ✅ Dueling DQN
     - ✅ Prioritized Experience Replay (PER)
     - ✅ Noisy DQN
-    - 🔄 N-step DQN 
+    - ✅ N-step DQN 
     - 🔄 c51
     - 🔄 rainbow
 - **Value Based DRL**
