@@ -20,11 +20,11 @@ class ExperienceReplay():
         
     def sample(self,batch_size):
         batch = random.sample(self.experience_replay,batch_size)
-        old_state = torch.tensor(np.array([x["old_state"]for x in batch]),device=self.device)
-        old_action = torch.tensor(np.array([x["old_action"]for x in batch]),device=self.device)
-        reward = torch.tensor(np.array([x["reward"]for x in batch]),device=self.device)
-        new_state = torch.tensor(np.array([x["new_state"]for x in batch]),device=self.device)
-        done = torch.tensor(np.array([x["done"]for x in batch]),device=self.device)
+        old_state = torch.tensor(np.array([x["old_state"]for x in batch]),device=self.device,dtype=torch.float32)
+        old_action = torch.tensor(np.array([x["old_action"]for x in batch]),device=self.device,dtype=torch.float32)
+        reward = torch.tensor(np.array([x["reward"]for x in batch]),device=self.device,dtype=torch.float32)
+        new_state = torch.tensor(np.array([x["new_state"]for x in batch]),device=self.device,dtype=torch.float32)
+        done = torch.tensor(np.array([x["done"]for x in batch]),device=self.device,dtype=torch.float32)
         return (old_state,old_action,reward,new_state,done)
     def size(self):
         return len(self.experience_replay)
