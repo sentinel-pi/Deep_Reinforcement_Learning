@@ -2,3 +2,4 @@ __pycache__
 videos/CartPole-v1/rl-video-episode-0.mp4
 videos/
 *.svg
+.idea/

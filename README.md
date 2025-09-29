@@ -15,5 +15,7 @@ a youtube video course relate to that will produced in the future
     - ✅ N-step DQN 
     - 🔄 c51
     - 🔄 rainbow
-- **Value Based DRL**
-    - coming soon...
+- **Policy Based DRL**
+    - ✅ Deep Q-Learning (DQN)
+    - 🔄 TD3
+    - More coming soon...
