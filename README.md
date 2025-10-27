@@ -17,5 +17,5 @@ a youtube video course relate to that will produced in the future
     - 🔄 rainbow
 - **Policy Based DRL**
     - ✅ Deep Q-Learning (DQN)
-    - 🔄 TD3
+    - ✅ TD3
     - More coming soon...
